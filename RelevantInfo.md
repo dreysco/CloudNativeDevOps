@@ -3,6 +3,11 @@ In K8s(kubernetes) all resources such as Deployments or Pods are represented by 
 
 Usual format for K8s manifest is YAML, but can also understand JSON.  
 ## Helpful Pod Info
+> Bash Autocompletion
+```
+source <(kubectl completion bash) # setup autocomplete in bash into the current shell, bash-completion package should be installed first.
+echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
+```
 #### Create pod via terminal  
 ```
 kubectl run <pod-name> --restart=Never --image=busybox 
@@ -113,6 +118,11 @@ spec:
         resources: {}
 status: {}
 ```
+#### Create a service that exposes a deployment on port 6262
+```
+kubectl expose <object-type> <object-name> --port 6262 --target-port=8080 # target port is exposed container port
+```
+
 
 ## Managing Resources
 #### Best Practice: Always specify resource requests and limits for containers.
