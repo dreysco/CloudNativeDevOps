@@ -38,6 +38,48 @@ status: {}
 # kubectl set image POD/POD_NAME CONTAINER_NAME=IMAGE_NAME:TAG  
 kubectl set image pod/nginx nginx=nginx:1.7.1
 ```
+#### Create a pod and expose a port on 80
+> --expose=false: If true, a public, external service is created for the container(s) which are run
+```
+kubectl run pod --image=nginx --restart=Never --port=80 --expose
+```
+This will create not only a pod, but also an external service.  
+#### Yaml of objects created below:
+```
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: enginx
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: enginx
+status:
+  loadBalancer: {}
+---
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: enginx
+  name: enginx
+spec:
+  containers:
+  - image: nginx
+    name: enginx
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+```
 ### Example Deployment manifest:  
 
 #### Get deployment YAML manifest w/:  
