@@ -1,27 +1,32 @@
-# Part 1
-In K8s(kubernetes) all resources such as Deployments or Pods are represented by records in its internal database.  
+# Objectives
+- [ ] **Pods**
+- [ ] **Deployments**
+- [ ] **Services**
+- [ ] **Resources**
+- [ ] **Jobs/Cronjobs**
+- [ ] **Volumes/Storage**
+- [ ] **Secrets/ConfigMaps**
 
-Usual format for K8s manifest is YAML, but can also understand JSON.  
-## Helpful Pod Info
-> Bash Autocompletion
-```
+> :bulb: Bash Autocompletion 
+```bash
 source <(kubectl completion bash) # setup autocomplete in bash into the current shell, bash-completion package should be installed first.
 echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
 ```
-#### Create pod via terminal  
+## Pods 
+#### Create busybox pod via terminal  
+```bash
+kubectl run busybox --restart=Never --image=busybox 
 ```
-kubectl run <pod-name> --restart=Never --image=busybox 
-```
-#### Create(fake) pod via terminal  
-```
-kubectl run <pod-name> --restart=Never --image=busybox --dry-run 
+#### Fake the creation of pod via terminal  
+```bash
+kubectl run busybox --restart=Never --image=busybox --dry-run 
 ```
 #### Get yaml for creating pod
-```
+```bash
 kubectl run <pod-name> --restart=Never --image=busybox --dry-run -o yaml
 ```
 #### Output:
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -39,18 +44,22 @@ spec:
 status: {}
 ```
 #### Change a pods image:  
-```
+```bash
 # kubectl set image POD/POD_NAME CONTAINER_NAME=IMAGE_NAME:TAG  
 kubectl set image pod/nginx nginx=nginx:1.7.1
 ```
-#### Create a pod and expose a port on 80
-> --expose=false: If true, a public, external service is created for the container(s) which are run
+#### Create a pod that accepts traffic on port 80
+```bash
+kubectl run pod --image=nginx --restart=Never --port=80
 ```
+#### Create a pod and expose a port on 80
+> :bulb: --expose=false: If true, a public, external service is created for the container(s) which are run 
+```bash
 kubectl run pod --image=nginx --restart=Never --port=80 --expose
 ```
 This will create not only a pod, but also an external service.  
 #### Yaml of objects created below:
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
