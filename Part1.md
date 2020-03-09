@@ -94,6 +94,42 @@ spec:
   restartPolicy: Never
 status: {}
 ```
+> :bulb: Pods can also have multiple containers!
+
+#### Let's create a multicontainer pod, one that accepts traffic on 80 the other accepts traffic on 8000:
+> First create the manifest
+```sh
+kubectl run multicontainer --image=nginx --restart=Never --port=80 --dry-run -o yaml > pod.yaml
+```
+> Edit the manifest file to add another container
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: multicontainer
+  name: multicontainer
+spec:
+  containers:
+  - image: nginx
+    name: multicontainer
+    ports:
+    - containerPort: 80
+    resources: {}
+  - image: nginx
+    name: multicontainer2
+    ports:
+    - containerPort: 8000
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+```
+> Now create the pod
+```sh
+kubectl create -f pod.yaml
+```
 ## Deployments
 #### Create a deployment
 ```sh
