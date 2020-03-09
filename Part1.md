@@ -13,6 +13,7 @@ source <(kubectl completion bash) # setup autocomplete in bash into the current 
 echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
 ```
 ## Pods 
+### Pod Creation
 #### Create busybox pod via terminal  
 ```bash
 kubectl run busybox --restart=Never --image=busybox 
@@ -129,6 +130,53 @@ status: {}
 > Now create the pod
 ```sh
 kubectl create -f pod.yaml
+```
+### Pod-Design
+#### Create two pods, both with label app=v1
+```sh
+kubectl run nginx1 --image=nginx --restart=Never --labels=app=v1; 
+kubectl run nginx2 --image=nginx --restart=Never --labels=app=v1
+```
+#### Change the second pods label to app=v2
+```sh
+kubectl label po nginx2 app=v2 --overwrite
+```
+#### Remove the app label from the two pods
+```sh
+kubectl label po nginx1 nginx2 app-
+```
+#### Deploying a pod to a Node w/ a label
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nodeselect
+  name: nodeselect
+spec:
+  nodeSelector:
+    key: 'value'
+  containers:
+  - image: nginx
+    name: nodeselect
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+```
+> :bulb: If you ever have questions while in the terminal, take use of the `kubectl explain` command. For more info `kubectl explain -h`
+#### Annotate the two nginx pods w/ a description
+```sh
+kubectl annotate po nginx1 nginx2 description='some value'
+```
+#### Remove the annotations we added previously
+```sh
+kubectl annotate po nginx1 nginx2 description-
+```
+#### Remove the pods we created in this section
+```sh
+kubectl delete po nginx1 nginx2
 ```
 ## Deployments
 #### Create a deployment
