@@ -1,6 +1,6 @@
 # Objectives
-- [ ] **Pods**
-- [ ] **Deployments**
+- [ ] [**Pods**](#pods)
+- [ ] [**Deployments**](#deployments)
 - [ ] **Services**
 - [ ] **Resources**
 - [ ] **Jobs/Cronjobs**
@@ -94,14 +94,18 @@ spec:
   restartPolicy: Never
 status: {}
 ```
-### Example Deployment manifest:  
+## Deployments
+#### Create a deployment
+```sh
+kubectl run testdeploy --image=busybox
+```
 
 #### Get deployment YAML manifest w/:  
 ```
 kubectl run testdeploy --image=busybox -o yaml --dry-run
 ```
 #### Output:
-```
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -127,11 +131,6 @@ spec:
         resources: {}
 status: {}
 ```
-#### Create a service that exposes a deployment on port 6262
-```
-kubectl expose <object-type> <object-name> --port 6262 --target-port=8080 # target port is exposed container port
-```
-
 
 ## Managing Resources
 #### Best Practice: Always specify resource requests and limits for containers.
@@ -143,7 +142,7 @@ Specifies the minimum amount of that resource the Pod needs to run.
 kubectl run resourcePod --image=busybox --restart=Never --requests="memory=10Mi,cpu=100m" --dry-run -o yaml
 ```
 #### Output:
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -170,7 +169,7 @@ Specifies the maximum amount of that resource the Pod is allowed to use.
 kubectl run resourcePod --image=busybox --restart=Never --limits="memory=10Mi,cpu=100m" --dry-run -o yaml
 ```
 #### Output:
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -189,4 +188,9 @@ spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Never
 status: {}
+```
+## Services
+#### Create a service that exposes a deployment on port 6262
+```sh
+kubectl expose <object-type> <object-name> --port 6262 --target-port=8080 # target port is exposed container port
 ```
