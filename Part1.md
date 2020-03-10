@@ -179,10 +179,40 @@ kubectl annotate po nginx1 nginx2 description-
 kubectl delete po nginx1 nginx2
 ```
 ## Deployments
-#### Create a deployment
+#### Create a deployment w/ 2 replicas and exposes port 80
 ```sh
-kubectl run testdeploy --image=busybox
+kubectl run testdeploy --image=nginx:1.7.8 --port=80 --replicas=2
 ```
+> Yaml of the object above looks like the following:
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ndeployment
+  name: ndeployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: ndeployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: ndeployment
+    spec:
+      containers:
+      - image: nginx:1.7.8
+        name: ndeployment
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
+```
+#### View the yaml of one of the deployments pods
 
 #### Get deployment YAML manifest w/:  
 ```
